@@ -1,103 +1,113 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - PASCOM</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div class="login-container">
-    <header>
-      <img src="imagens/pascom-admin.png" alt="Logo PASCOM ADMIN" class="logo">
-    </header>
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    <main>
-      <div id="user-info" class="hidden">
-        <img id="user-photo" src="" alt="Foto do usuário" />
-        <span id="user-name"></span>
-      </div>
+/* Corpo com imagem de fundo */
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: url("../imagens/fundo.jpg") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-      <form id="loginForm">
-        <input type="email" id="email" placeholder="Email" required />
-        
-        <div id="password-section" class="hidden">
-          <input type="password" id="senha" placeholder="Senha" required />
-        </div>
+/* Conteúdo principal solto na tela */
+main {
+  width: 100%;
+  max-width: 600px;
+  padding: 40px 20px;
+  color: #fff;
+  position: relative;
+}
 
-        <button type="submit">Próximo</button>
-        <p id="erro" class="erro"></p>
-      </form>
+/* Logo da PASCOM */
+.logo {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  height: 80px;
+}
 
-      <img src="imagens/paroquia.png" alt="Paróquia" class="parish-image">
-    </main>
-  </div>
+/* Imagem da paróquia */
+.img-paroquia {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  height: 120px;
+  opacity: 0.9;
+}
 
-  <script type="module">
-    import { auth } from "./scripts/firebase-config.js";
-    import {
-      signInWithEmailAndPassword,
-      setPersistence,
-      browserSessionPersistence,
-      onAuthStateChanged,
-      fetchSignInMethodsForEmail
-    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+/* Título */
+main h1 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 700;
+}
 
-    const form = document.getElementById("loginForm");
-    const emailInput = document.getElementById("email");
-    const senhaInput = document.getElementById("senha");
-    const passwordSection = document.getElementById("password-section");
-    const erro = document.getElementById("erro");
-    const userInfo = document.getElementById("user-info");
-    const userPhoto = document.getElementById("user-photo");
-    const userName = document.getElementById("user-name");
+/* Formulário de login */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-    let emailValido = false;
+input {
+  padding: 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = emailInput.value;
-      const senha = senhaInput.value;
+input::placeholder {
+  color: #ddd;
+}
 
-      try {
-        await setPersistence(auth, browserSessionPersistence);
+button {
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #005c99;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
 
-        if (!emailValido) {
-          // Primeira etapa: checar se o email existe
-          const methods = await fetchSignInMethodsForEmail(auth, email);
-          if (methods.length === 0) {
-            erro.textContent = "Email não cadastrado.";
-            return;
-          }
+button:hover {
+  background-color: #004070;
+}
 
-          // Simulação: dados do usuário (substituir por dados reais no futuro)
-          userName.textContent = "Nome do Usuário";
-          userPhoto.src = "https://i.pravatar.cc/80"; // Exemplo aleatório
+/* Erro */
+#erro {
+  color: #ffaaaa;
+  text-align: center;
+  margin-top: 10px;
+}
 
-          userInfo.classList.remove("hidden");
-          passwordSection.classList.remove("hidden");
-          emailValido = true;
-          erro.textContent = "";
-          return;
-        }
+/* Informações do usuário após validar email */
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 15px;
+}
 
-        // Segunda etapa: login com senha
-        await signInWithEmailAndPassword(auth, email, senha);
-        window.location.href = "painel.html";
+.user-info img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
 
-      } catch (err) {
-        console.error("Erro ao logar:", err);
-        erro.textContent = "Email ou senha inválidos.";
-      }
-    });
-
-    // Se já estiver logado, redireciona
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = "painel.html";
-      }
-    });
-  </script>
-</body>
-</html>
+.user-info span {
+  font-weight: 700;
+  font-size: 18px;
+}
