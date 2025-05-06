@@ -1,110 +1,113 @@
 /* Reset básico */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Corpo com imagem de fundo */
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background: url("../imagens/fundo.jpg") no-repeat center center fixed;
-    background-size: cover;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Container principal */
-  main {
-    width: 800px;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    position: relative;
-  }
-  
-  /* Logo da PASCOM */
-  .logo {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    height: 80px;
-  }
-  
-  /* Imagem da paróquia */
-  .img-paroquia {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    height: 120px;
-    opacity: 0.9;
-  }
-  
-  /* Título */
-  main h1 {
-    font-size: 32px;
-    margin-bottom: 30px;
-    text-align: center;
-    font-weight: 700;
-    color: #333;
-  }
-  
-  /* Formulário */
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  input {
-    padding: 14px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  
-  button {
-    padding: 14px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #005c99;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  button:hover {
-    background-color: #004070;
-  }
-  
-  /* Mensagem de erro */
-  #erro {
-    color: red;
-    text-align: center;
-    margin-top: 10px;
-  }
-  
-  /* Estilo pra nome e imagem do usuário (se for exibir) */
-  .user-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .user-info img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-right: 15px;
-  }
-  
-  .user-info span {
-    font-weight: 700;
-    font-size: 18px;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo com imagem de fundo */
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: url("../imagens/fundo.jpg") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Conteúdo principal solto na tela */
+main {
+  width: 100%;
+  max-width: 600px;
+  padding: 40px 20px;
+  color: #fff;
+  position: relative;
+}
+
+/* Logo da PASCOM */
+.logo {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  height: 80px;
+}
+
+/* Imagem da paróquia */
+.img-paroquia {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  height: 120px;
+  opacity: 0.9;
+}
+
+/* Título */
+main h1 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Formulário de login */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input {
+  padding: 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+input::placeholder {
+  color: #ddd;
+}
+
+button {
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #005c99;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #004070;
+}
+
+/* Erro */
+#erro {
+  color: #ffaaaa;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Informações do usuário após validar email */
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.user-info img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.user-info span {
+  font-weight: 700;
+  font-size: 18px;
+}
