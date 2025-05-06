@@ -2,12 +2,17 @@
 
 import { auth } from "./firebase-config.js";
 import {
+  signOut,
   signInWithEmailAndPassword,
   setPersistence,
   browserSessionPersistence,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
+// Sempre força logout ao abrir a página de login
+signOut(auth).catch((error) => {
+  console.warn("Erro ao fazer signOut automático:", error);
+});
 // Quando o DOM estiver carregado
 window.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("login-form");
