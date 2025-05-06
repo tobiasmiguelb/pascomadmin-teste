@@ -1,113 +1,104 @@
-/* Reset básico */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - PASCOM</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <img src="imagens/pascom-admin.png" alt="PASCOM SANT'ANA - ADMIN" class="logo">
+  <img src="imagens/paroquia.png" alt="Imagem da Paróquia" class="img-paroquia">
 
-/* Corpo com imagem de fundo */
-body {
-  font-family: 'Montserrat', sans-serif;
-  background: url("../imagens/fundo.jpg") no-repeat center center fixed;
-  background-size: cover;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  <main>
+    <h1>Login PASCOM</h1>
 
-/* Conteúdo principal solto na tela */
-main {
-  width: 100%;
-  max-width: 600px;
-  padding: 40px 20px;
-  color: #fff;
-  position: relative;
-}
+    <div id="user-info" class="user-info" style="display: none;">
+      <img id="user-photo" src="" alt="Foto do usuário">
+      <span id="user-name"></span>
+    </div>
 
-/* Logo da PASCOM */
-.logo {
-  position: absolute;
-  top: 30px;
-  left: 30px;
-  height: 80px;
-}
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required />
+      <button type="button" id="btnProximo">PRÓXIMO</button>
 
-/* Imagem da paróquia */
-.img-paroquia {
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  height: 120px;
-  opacity: 0.9;
-}
+      <div id="senha-container" style="display: none;">
+        <input type="password" id="senha" placeholder="Senha" required />
+        <button type="submit">Entrar</button>
+      </div>
+    </form>
 
-/* Título */
-main h1 {
-  font-size: 32px;
-  margin-bottom: 30px;
-  text-align: center;
-  font-weight: 700;
-}
+    <p id="erro"></p>
+  </main>
 
-/* Formulário de login */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+  <script type="module">
+    import { auth } from "./scripts/firebase-config.js";
+    import {
+      signInWithEmailAndPassword,
+      setPersistence,
+      browserSessionPersistence,
+      fetchSignInMethodsForEmail,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-input {
-  padding: 14px;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
+    const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const senhaInput = document.getElementById("senha");
+    const senhaContainer = document.getElementById("senha-container");
+    const erro = document.getElementById("erro");
+    const userInfo = document.getElementById("user-info");
+    const userPhoto = document.getElementById("user-photo");
+    const userName = document.getElementById("user-name");
+    const btnProximo = document.getElementById("btnProximo");
 
-input::placeholder {
-  color: #ddd;
-}
+    // Quando clicar em PRÓXIMO
+    btnProximo.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      if (!email) return;
 
-button {
-  padding: 14px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #005c99;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
+      try {
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+        if (methods.length === 0) {
+          erro.textContent = "Email não encontrado.";
+          return;
+        }
 
-button:hover {
-  background-color: #004070;
-}
+        // Simula nome e foto (você pode integrar com Firestore depois)
+        userPhoto.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(email.split("@")[0]);
+        userName.textContent = email;
+        userInfo.style.display = "flex";
+        senhaContainer.style.display = "block";
+        erro.textContent = "";
 
-/* Erro */
-#erro {
-  color: #ffaaaa;
-  text-align: center;
-  margin-top: 10px;
-}
+      } catch (err) {
+        erro.textContent = "Erro ao verificar email.";
+        console.error(err);
+      }
+    });
 
-/* Informações do usuário após validar email */
-.user-info {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  gap: 15px;
-}
+    // Quando enviar o formulário
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      const senha = senhaInput.value;
 
-.user-info img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
+      try {
+        await setPersistence(auth, browserSessionPersistence);
+        await signInWithEmailAndPassword(auth, email, senha);
+        window.location.href = "painel.html";
+      } catch (err) {
+        erro.textContent = "Email ou senha inválidos.";
+        console.error(err);
+      }
+    });
 
-.user-info span {
-  font-weight: 700;
-  font-size: 18px;
-}
+    // Se já estiver logado, redireciona direto
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "painel.html";
+      }
+    });
+  </script>
+</body>
+</html>
