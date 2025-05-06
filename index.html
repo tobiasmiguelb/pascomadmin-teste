@@ -1,37 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Verificando login...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel PASCOM - Feed</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <img src="imagens/logo.png" alt="Logo PASCOM" height="50" />
+    <button id="btnCriarPost">+ Criar Post</button>
+    <button id="btnLogout">Sair</button>
+  </header>
+
+  <main id="feed">
+    <!-- Aqui vão aparecer os posts -->
+  </main>
+
+  <!-- Proteção: redireciona se não estiver logado -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { auth, onAuthStateChanged, signOut } from "./scripts/auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDULQdfX1QQGqi3Y3LzOPfhhvP6lvp6kcU",
-      authDomain: "pascomadmin-teste.firebaseapp.com",
-      projectId: "pascomadmin-teste",
-      storageBucket: "pascomadmin-teste.appspot.com",
-      messagingSenderId: "824218409362",
-      appId: "1:824218409362:web:e285e07882c9ca8faa894b"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Verifica se está logado
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        // Usuário logado: redirecionar pro feed real (ainda vamos montar esse)
-        window.location.href = "feed.html"; // Pode ser o próprio index depois
-      } else {
-        // Não logado: manda pra login
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
         window.location.href = "login.html";
       }
     });
+
+    document.getElementById('btnCriarPost').addEventListener('click', () => {
+      window.location.href = "criar-post.html";
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
   </script>
-</head>
-<body>
-  <p>Verificando login...</p>
+
+  <!-- Carrega os posts -->
+  <script type="module" src="scripts/timeline.js"></script>
 </body>
 </html>
