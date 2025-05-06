@@ -3,41 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Painel PASCOM - Feed</title>
+  <title>Login - PASCOM</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header>
-    <img src="imagens/logo.png" alt="Logo PASCOM" height="50" />
-    <button id="btnCriarPost">+ Criar Post</button>
-    <button id="btnLogout">Sair</button>
-  </header>
-
-  <main id="feed">
-    <!-- Aqui vão aparecer os posts -->
+  <main>
+    <h1>Login PASCOM</h1>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="senha" placeholder="Senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <p id="erro" style="color: red;"></p>
   </main>
 
-  <!-- Proteção: redireciona se não estiver logado -->
   <script type="module">
-    import { auth, onAuthStateChanged, signOut } from "./scripts/auth.js";
+    import { auth } from "./scripts/firebase-config.js";
+    import {
+      signInWithEmailAndPassword,
+      setPersistence,
+      browserSessionPersistence,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html";
+    const form = document.getElementById("loginForm");
+    const erro = document.getElementById("erro");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+
+      try {
+        await setPersistence(auth, browserSessionPersistence);
+        await signInWithEmailAndPassword(auth, email, senha);
+        window.location.href = "painel.html";
+      } catch (err) {
+        erro.textContent = "Email ou senha inválidos.";
+        console.error(err);
       }
     });
 
-    document.getElementById('btnCriarPost').addEventListener('click', () => {
-      window.location.href = "criar-post.html";
-    });
-
-    document.getElementById('btnLogout').addEventListener('click', async () => {
-      await signOut(auth);
-      window.location.href = "login.html";
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "painel.html";
+      }
     });
   </script>
-
-  <!-- Carrega os posts -->
-  <script type="module" src="scripts/timeline.js"></script>
 </body>
 </html>

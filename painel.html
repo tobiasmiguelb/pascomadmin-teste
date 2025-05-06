@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel PASCOM</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <img src="imagens/logo.png" alt="Logo PASCOM" height="50" />
+    <button id="btnCriarPost">+ Criar Post</button>
+    <button id="btnLogout">Sair</button>
+  </header>
+
+  <main id="feed">
+    <!-- Os posts vão aparecer aqui -->
+  </main>
+
+  <!-- Proteção de rota: só acessa se estiver logado -->
+  <script type="module">
+    import { auth } from "./scripts/firebase-config.js";
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+      }
+    });
+
+    document.getElementById('btnCriarPost').addEventListener('click', () => {
+      window.location.href = "criar-post.html";
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
+  </script>
+
+  <!-- Carrega os posts -->
+  <script type="module" src="scripts/timeline.js"></script>
+</body>
+</html>
