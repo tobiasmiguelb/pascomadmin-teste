@@ -5,109 +5,83 @@
   box-sizing: border-box;
 }
 
-/* Corpo com imagem de fundo */
 body {
   font-family: 'Montserrat', sans-serif;
-  background: url("../imagens/fundo.jpg") no-repeat center center fixed;
+  background-image: url('../imagens/fundo.jpg'); /* Coloque aqui sua imagem de fundo completa */
   background-size: cover;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-position: center;
+  height: 100vh;
+  color: #000;
 }
 
-/* Conteúdo principal solto na tela */
-main {
-  width: 100%;
-  max-width: 600px;
-  padding: 40px 20px;
-  color: #fff;
-  position: relative;
+/* Aplica preto pra todos os textos */
+body, h1, h2, h3, h4, h5, h6, p, span, label, input, button {
+  color: #000;
 }
 
 /* Logo da PASCOM */
 .logo {
   position: absolute;
-  top: 30px;
-  left: 30px;
+  top: 20px;
+  left: 20px;
   height: 80px;
 }
 
 /* Imagem da paróquia */
-.img-paroquia {
+.imagem-paroquia {
   position: absolute;
-  bottom: 30px;
-  right: 30px;
-  height: 120px;
-  opacity: 0.9;
+  bottom: 20px;
+  left: 20px;
+  height: 200px;
 }
 
-/* Título */
-main h1 {
-  font-size: 32px;
-  margin-bottom: 30px;
-  text-align: center;
-  font-weight: 700;
-}
-
-/* Formulário de login */
-form {
+/* Container do login */
+.login-container {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-input {
-  padding: 14px;
+/* Estilo dos inputs */
+.login-container input {
+  padding: 12px;
+  width: 300px;
+  border: 1px solid #ccc;
   font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #fff;
 }
 
-input::placeholder {
-  color: #ddd;
-}
-
-button {
-  padding: 14px;
+/* Botão de avançar/login */
+.login-container button {
+  padding: 12px;
   font-size: 16px;
   font-weight: bold;
-  background-color: #005c99;
-  color: white;
+  background-color: #f1c40f;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background-color 0.2s ease;
 }
 
-button:hover {
-  background-color: #004070;
+.login-container button:hover {
+  background-color: #d4ac0d;
 }
 
-/* Erro */
-#erro {
-  color: #ffaaaa;
-  text-align: center;
-  margin-top: 10px;
-}
-
-/* Informações do usuário após validar email */
+/* Informações do usuário quando email for reconhecido */
 .user-info {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  gap: 15px;
+  gap: 10px;
 }
 
 .user-info img {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
 }
 
 .user-info span {
-  font-weight: 700;
-  font-size: 18px;
+  font-weight: bold;
 }
