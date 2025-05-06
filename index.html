@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - PASCOM</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <title>Verificando login...</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDULQdfX1QQGqi3Y3LzOPfhhvP6lvp6kcU",
+      authDomain: "pascomadmin-teste.firebaseapp.com",
+      projectId: "pascomadmin-teste",
+      storageBucket: "pascomadmin-teste.appspot.com",
+      messagingSenderId: "824218409362",
+      appId: "1:824218409362:web:e285e07882c9ca8faa894b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Verifica se está logado
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        // Usuário logado: redirecionar pro feed real (ainda vamos montar esse)
+        window.location.href = "feed.html"; // Pode ser o próprio index depois
+      } else {
+        // Não logado: manda pra login
+        window.location.href = "login.html";
+      }
+    });
+  </script>
 </head>
 <body>
-  <div class="container">
-    <img src="imagens/logo.png" alt="Logo PASCOM" class="logo" />
-    <h2>Entrar no Painel PASCOM</h2>
-
-    <form id="login-form">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="senha" placeholder="Senha" required />
-      <button type="submit">Entrar</button>
-    </form>
-
-    <p id="erro-login" class="erro-msg"></p>
-  </div>
-
-  <script type="module" src="scripts/auth.js"></script>
+  <p>Verificando login...</p>
 </body>
 </html>

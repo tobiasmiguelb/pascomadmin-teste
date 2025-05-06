@@ -1,20 +1,25 @@
 // scripts/auth.js
 
 import { auth } from './firebase-config.js';
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
 
-document.getElementById("login-form").addEventListener("submit", function(e) {
-  e.preventDefault();
+// Função de login
+export function login(email, senha) {
+  return signInWithEmailAndPassword(auth, email, senha);
+}
 
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
+// Função de logout
+export function logout() {
+  return signOut(auth);
+}
 
-  signInWithEmailAndPassword(auth, email, senha)
-    .then((userCredential) => {
-      console.log("Login feito com sucesso!");
-      window.location.href = "index.html"; // Redireciona para o feed
-    })
-    .catch((error) => {
-      alert("Erro no login: " + error.message);
-    });
-});
+// Função pra verificar se tá logado
+export function verificarUsuario(callback) {
+  onAuthStateChanged(auth, user => {
+    callback(user);
+  });
+}
