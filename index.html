@@ -5,17 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login - PASCOM</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <main>
-    <h1>Login PASCOM</h1>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="senha" placeholder="Senha" required />
-      <button type="submit">Entrar</button>
-    </form>
-    <p id="erro" style="color: red;"></p>
-  </main>
+  <div class="login-container">
+    <header>
+      <img src="imagens/pascom-admin.png" alt="Logo PASCOM ADMIN" class="logo">
+    </header>
+
+    <main>
+      <div id="user-info" class="hidden">
+        <img id="user-photo" src="" alt="Foto do usuário" />
+        <span id="user-name"></span>
+      </div>
+
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required />
+        
+        <div id="password-section" class="hidden">
+          <input type="password" id="senha" placeholder="Senha" required />
+        </div>
+
+        <button type="submit">Próximo</button>
+        <p id="erro" class="erro"></p>
+      </form>
+
+      <img src="imagens/paroquia.png" alt="Paróquia" class="parish-image">
+    </main>
+  </div>
 
   <script type="module">
     import { auth } from "./scripts/firebase-config.js";
@@ -23,27 +40,59 @@
       signInWithEmailAndPassword,
       setPersistence,
       browserSessionPersistence,
-      onAuthStateChanged
+      onAuthStateChanged,
+      fetchSignInMethodsForEmail
     } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
     const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const senhaInput = document.getElementById("senha");
+    const passwordSection = document.getElementById("password-section");
     const erro = document.getElementById("erro");
+    const userInfo = document.getElementById("user-info");
+    const userPhoto = document.getElementById("user-photo");
+    const userName = document.getElementById("user-name");
+
+    let emailValido = false;
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
+      const email = emailInput.value;
+      const senha = senhaInput.value;
 
       try {
         await setPersistence(auth, browserSessionPersistence);
+
+        if (!emailValido) {
+          // Primeira etapa: checar se o email existe
+          const methods = await fetchSignInMethodsForEmail(auth, email);
+          if (methods.length === 0) {
+            erro.textContent = "Email não cadastrado.";
+            return;
+          }
+
+          // Simulação: dados do usuário (substituir por dados reais no futuro)
+          userName.textContent = "Nome do Usuário";
+          userPhoto.src = "https://i.pravatar.cc/80"; // Exemplo aleatório
+
+          userInfo.classList.remove("hidden");
+          passwordSection.classList.remove("hidden");
+          emailValido = true;
+          erro.textContent = "";
+          return;
+        }
+
+        // Segunda etapa: login com senha
         await signInWithEmailAndPassword(auth, email, senha);
         window.location.href = "painel.html";
+
       } catch (err) {
+        console.error("Erro ao logar:", err);
         erro.textContent = "Email ou senha inválidos.";
-        console.error(err);
       }
     });
 
+    // Se já estiver logado, redireciona
     onAuthStateChanged(auth, (user) => {
       if (user) {
         window.location.href = "painel.html";
