@@ -1,59 +1,43 @@
 // scripts/auth.js
 
-import { auth } from './firebase-config.js';
+import { auth } from "./firebase-config.js";
 import {
   signInWithEmailAndPassword,
   setPersistence,
   browserSessionPersistence,
-  signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-// Definir persistência: só dura enquanto a aba estiver aberta
-setPersistence(auth, browserSessionPersistence)
-  .then(() => {
-    console.log("Persistência de sessão ativada");
-    
-    // Pega o formulário de login
-    const loginForm = document.getElementById("login-form");
-    
-    if (loginForm) {
-      loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+// Quando o DOM estiver carregado
+window.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("login-form");
+  const errorText = document.getElementById("login-error");
 
-        const email = loginForm["email"].value;
-        const password = loginForm["password"].value;
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        signInWithEmailAndPassword(auth, email, password)
-          .then(() => {
-            window.location.href = "index.html"; // Redireciona após login
-          })
-          .catch((error) => {
-            alert("Erro ao fazer login: " + error.message);
-          });
-      });
+    const email = form.email.value;
+    const password = form.password.value;
+
+    try {
+      // Mantém a sessão só até o navegador/aba ser fechado
+      await setPersistence(auth, browserSessionPersistence);
+
+      // Faz login
+      await signInWithEmailAndPassword(auth, email, password);
+
+      // Redireciona pra página principal
+      window.location.href = "index.html";
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      errorText.textContent = "Email ou senha incorretos.";
     }
-  })
-  .catch((error) => {
-    console.error("Erro ao definir persistência de sessão:", error);
   });
 
-
-// Função para logout (pode ser chamada em um botão)
-export function logout() {
-  signOut(auth).then(() => {
-    window.location.href = "login.html"; // Volta para o login
-  }).catch((error) => {
-    console.error("Erro ao sair:", error);
-  });
-}
-
-
-// Verificador de autenticação (pode usar nas páginas privadas)
-export function verificaLoginOuRedireciona() {
+  // Se o usuário já estiver logado, redireciona direto
   onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "login.html";
+    if (user) {
+      window.location.href = "index.html";
     }
   });
-}
+});
