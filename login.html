@@ -1,43 +1,43 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PASCOM - Login</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
-  <div class="login-container">
-    <h1>Login PASCOM</h1>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="senha" placeholder="Senha" required />
-      <button type="submit">Entrar</button>
-    </form>
-    <p id="mensagemErro" style="color: red;"></p>
-  </div>
+// scripts/auth.js
 
-  <script type="module">
-    import { login } from './scripts/auth.js';
+import { auth } from "./firebase-config.js";
+import {
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserSessionPersistence,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-    const form = document.getElementById('loginForm');
-    const mensagemErro = document.getElementById('mensagemErro');
+// Quando o DOM estiver carregado
+window.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("login-form");
+  const errorText = document.getElementById("login-error");
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const email = document.getElementById('email').value;
-      const senha = document.getElementById('senha').value;
+    const email = form.email.value;
+    const password = form.password.value;
 
-      try {
-        await login(email, senha);
-        // Redireciona se deu certo
-        window.location.href = "index.html";
-      } catch (erro) {
-        mensagemErro.textContent = "Erro ao fazer login. Verifique seu email e senha.";
-        console.error(erro);
-      }
-    });
-  </script>
-</body>
-</html>
+    try {
+      // Mantém a sessão só até o navegador/aba ser fechado
+      await setPersistence(auth, browserSessionPersistence);
+
+      // Faz login
+      await signInWithEmailAndPassword(auth, email, password);
+
+      // Redireciona pra página principal
+      window.location.href = "index.html";
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      errorText.textContent = "Email ou senha incorretos.";
+    }
+  });
+
+  // Se o usuário já estiver logado, redireciona direto
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      window.location.href = "index.html";
+    }
+  });
+});
