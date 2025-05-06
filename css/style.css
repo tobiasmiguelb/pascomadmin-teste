@@ -5,14 +5,19 @@
     box-sizing: border-box;
   }
   
-  body {
+  html, body {
+    height:100%;
+    width: 100%;
     font-family: 'Montserrat', sans-serif;
-    background: url('../imagens/fundo.jpg') no-repeat center center fixed;
+    background: url('.../imagens/fundo.jpg') no-repeat center center fixed;
     background-size: cover;
-    min-height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+  }
+
+  body {
+overflow: hidden;
   }
   
   /* Container geral */
