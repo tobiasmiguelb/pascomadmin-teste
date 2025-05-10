@@ -32,7 +32,7 @@ body, h1, h2, h3, h4, h5, h6, p, span, label, input, button {
   bottom: 0; /* gruda na base */
   top: 80px;
   left: 0;
-  height: calc(10vh - 80px); /* ocupa do cabeçalho até o final da tela */
+  height: calc(100vh - 80px); /* ocupa do cabeçalho até o final da tela */
   width: auto;
 }
 
