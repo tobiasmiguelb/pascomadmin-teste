@@ -8,29 +8,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <img src="imagens/pascom-admin.png" alt="PASCOM SANT'ANA - ADMIN" class="logo">
-  <img src="imagens/paroquia.png" alt="Imagem da Paróquia" class="img-paroquia">
+  <img src="imagens/paroquia.png" alt="Imagem da Paróquia" class="img_paroquia">
 
-  <main>
+  <header class="cabecalho">
+    <img src="imagens/pascom-admin.png" alt="Logo PASCOM" class="logo">
+  </header>
+  
+  <main class="login-container">
     <h1>Login PASCOM</h1>
-
+  
     <div id="user-info" class="user-info" style="display: none;">
       <img id="user-photo" src="" alt="Foto do usuário">
       <span id="user-name"></span>
     </div>
-
+  
     <form id="loginForm">
       <input type="email" id="email" placeholder="Email" required />
       <button type="button" id="btnProximo">PRÓXIMO</button>
-
+  
       <div id="senha-container" style="display: none;">
         <input type="password" id="senha" placeholder="Senha" required />
         <button type="submit">Entrar</button>
       </div>
     </form>
-
+  
     <p id="erro"></p>
-  </main>
+  </main>  
 
   <script type="module">
     import { auth } from "./scripts/firebase-config.js";
