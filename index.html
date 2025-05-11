@@ -8,31 +8,54 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body> 
+
+  <!-- Fundo com SVGs -->
+  <div id="bg-layer">
+    <div id="svg-container"></div>
+  </div>
+
+  <!-- Cabeçalho fixo só com a logo -->
   <header class="cabecalho">
     <img src="imagens/pascom-admin.png" alt="Logo PASCOM" class="logo">
   </header>
-  
-  <main class="login-container">
-    <h1>Login PASCOM</h1>
-  
-    <div id="user-info" class="user-info" style="display: none;">
-      <img id="user-photo" src="" alt="Foto do usuário">
-      <span id="user-name"></span>
-    </div>
-  
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <button type="button" id="btnProximo">PRÓXIMO</button>
-  
-      <div id="senha-container" style="display: none;">
-        <input type="password" id="senha" placeholder="Senha" required />
-        <button type="submit">Entrar</button>
+
+  <!-- Conteúdo principal -->
+  <main class="main-login">
+
+    <!-- Galeria com fotos dos membros -->
+    <section class="foto-lateral" id="foto-lateral">
+      <div class="foto-membro" id="foto-membro">
+        <p class="nome-membro"></p>
       </div>
-    </form>
+    </section>
 
-    <p id="erro"></p>
-  </main>  
+    <!-- Formulário de login -->
+    <section class="login-container">
+      <h1>LOGIN PASCOM</h1>
+    
+      <div id="user-info" class="user-info" style="display: none;">
+        <img id="user-photo" src="" alt="Foto do usuário">
+        <span id="user-name"></span>
+      </div>
+    
+      <form id="loginForm" autocomplete="off">
+        <div class="input-wrapper">
+          <span class="icon">👤</span>
+          <input type="email" id="email" placeholder="Email" required />
+        </div>
+  
+        <div id="senha-container" class="senha-container">
+          <input type="password" id="senha" placeholder="Senha" required />
+          <button type="submit">Entrar</button>
+        </div>
+      </form>
 
+      <p id="erro"></p>
+    </section>
+
+  </main>
+
+  <!-- Firebase + Login -->
   <script type="module">
     import { auth } from "./scripts/firebase-config.js";
     import {
@@ -51,10 +74,8 @@
     const userInfo = document.getElementById("user-info");
     const userPhoto = document.getElementById("user-photo");
     const userName = document.getElementById("user-name");
-    const btnProximo = document.getElementById("btnProximo");
 
-    // Quando clicar em PRÓXIMO
-    btnProximo.addEventListener("click", async () => {
+    emailInput.addEventListener("blur", async () => {
       const email = emailInput.value.trim();
       if (!email) return;
 
@@ -65,12 +86,12 @@
           return;
         }
 
-        // Simula nome e foto (você pode integrar com Firestore depois)
         userPhoto.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(email.split("@")[0]);
         userName.textContent = email;
         userInfo.style.display = "flex";
-        senhaContainer.style.display = "block";
+        senhaContainer.classList.add("show");
         erro.textContent = "";
+        emailInput.classList.add("up");
 
       } catch (err) {
         erro.textContent = "Erro ao verificar email.";
@@ -78,7 +99,6 @@
       }
     });
 
-    // Quando enviar o formulário
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = emailInput.value.trim();
@@ -94,7 +114,6 @@
       }
     });
 
-    // Se já estiver logado, redireciona direto
     onAuthStateChanged(auth, (user) => {
       if (user) {
         window.location.href = "painel.html";
@@ -102,7 +121,11 @@
     });
   </script>
 
-    <img src="imagens/paroquia.png" alt="Imagem da Paróquia" class="img_paroquia">  
+  <!-- Galeria de fotos dos membros -->
+  <script src="scripts/fotos-membros.js" type="module"></script>
+
+  <!-- SVGs animados -->
+  <script src="scripts/svgs.js" type="module"></script>
 
 </body>
 </html>
